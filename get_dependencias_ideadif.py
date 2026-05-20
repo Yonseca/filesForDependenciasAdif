@@ -1,7 +1,6 @@
 import requests
 
-# Using the looooooong URL so it does not convert ":" into "%-like" format
-url = "https://ideadif.adif.es/gservices/Tramificacion/wfs?request=GetFeature&service=WFS&version=2.0.0&typename=Tramificacion:Dependencias"
+URL = "https://ideadif.adif.es/gservices/Tramificacion/wfs?request=GetFeature"
 
 def main():
     output_formats = ["text/csv", "json", "kml"]
@@ -9,15 +8,17 @@ def main():
         get_file_as(output_format)
 
 def get_file_as(output):
-    full_url = url + "&outputFormat=" + output
-    print("URL: " + full_url)
+    params = "&service=WFS&version=2.0.0&typename=Tramificacion:Dependencias&outputFormat=" + output
 
-    r = requests.get(full_url)
-    output_filename = "files/DependenciasAdif" + get_extension(output)
-    with open(output_filename, "w") as file:
-        print("Generating " + output_filename)
-        for lines in r.text:
-            file.write(lines)
+    try:
+        r = requests.get(URL, params=params, timeout=15)
+        output_filename = "files/DependenciasAdif" + get_extension(output)
+        with open(output_filename, "w", encoding="utf8") as file:
+            print("Generating " + output_filename)
+            for lines in r.text:
+                file.write(lines)
+    except requests.exceptions.Timeout:
+        print("Timeout :( ")
 
 def get_extension(output):
     match output:
