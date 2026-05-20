@@ -1,4 +1,12 @@
+"""
+    This file simply calls an IDEAdif endpoint that returns all the
+    stations and some many other facilities managed by Adif, the
+    Spanish railway infrastructure manager.
 
+    The main purpose is to make it easier to provide this PUBLIC data to anyone.
+    However, this data belongs to Adif, and so they require attribution:
+    © Administrador de infraestructuras ferroviarias
+"""
 
 import json
 import requests
